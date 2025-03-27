@@ -2,14 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
-from torch.nn import init
-
-from utils.utils import setseed
-from utils.layer import VLAD, DimensionalityReduction, LocalHead
-from losses import descriptor_global_loss, descriptor_local_loss, detector_loss
 
 
-setseed(0)
+from model.utils.layer import VLAD, DimensionalityReduction, LocalHead
+from model.losses import descriptor_global_loss, descriptor_local_loss, detector_loss
 
 def image_normalization(image, pixel_value_offset=128.0, pixel_value_scale=128.0):
     return (image - pixel_value_offset) / pixel_value_scale
@@ -113,15 +109,14 @@ class HFNet(nn.Module):
         features_2 = self.features[7:](features_1)
 
         # local_head
-        desc, logits, prob_full, prob = self.local_head(features_1)
+        desc, logits, prob = self.local_head(features_1)
 
         # Classification (if needed)
         descriptor = self.global_head(features_2)
 
         return {'local_descriptor_map':desc,
                 'logits':logits,
-                'prob_full':prob_full,
-                'scores_dense':prob,
+                'dense_scores':prob,
                 'global_descriptor':descriptor,
                 'image_shape':x.shape
                 }
@@ -141,41 +136,31 @@ class HFNet(nn.Module):
                 m.bias.data.zero_()
                 
     def _compute_loss(self, inputs, outputs, config):
-        if 'scores' in outputs:
-            k = outputs['scores'].shape[1]
-            k = min(config['local']['num_keypoints'], k)
-            topk_indices = torch.topk(outputs['scores'].squeeze(0),k).indices
-            
-            outputs['keypoints'] = outputs['keypoints'].squeeze(0)[topk_indices].unsqueeze(0)
-            outputs['local_descriptors'] = outputs['local_descriptors'].squeeze(0)[topk_indices].unsqueeze(0)
-
-            inputs['keypoints'] = inputs['keypoints'].squeeze(0)[topk_indices].unsqueeze(0)
-            inputs['local_descriptors'] = inputs['local_descriptors'].squeeze(0)[topk_indices].unsqueeze(0)
-
         """Computes the total loss using external loss functions."""
         desc_g = descriptor_global_loss(inputs, outputs).mean()
         desc_l = descriptor_local_loss(inputs, outputs).mean()
-        detect = detector_loss(inputs, outputs, config)
+        detect = detector_loss(inputs, outputs, config).mean()
 
         # Apply weighting
         if config['loss_weights'] == 'uncertainties':
-            logvar = {f'logvar_{i}': logvar.item() for i, logvar in enumerate(self.logvars)}
+            w = {f'logvar_{i}': logvar.item() for i, logvar in enumerate(self.logvars)}
             precisions = [torch.exp(-logvar) for logvar in self.logvars]
-            total_loss = desc_g * precisions[0] + self.logvars[0]
-            total_loss += desc_l * precisions[1] + self.logvars[1]
-            total_loss += 2*detect * precisions[2] + self.logvars[2]
+            total_loss = desc_g * precisions[0] + (self.logvars[0])
+            total_loss += desc_l * precisions[1] + (self.logvars[1])
+            total_loss += 2 * detect * precisions[2] + (self.logvars[2])
         else:
             w = config['loss_weights']
             total_loss = (
                 (w['global'] * desc_g + w['local'] * desc_l + w['detector'] * detect) /
                 sum(w.values())
             )
+        
 
         return total_loss, {
             'global_desc_l2': desc_g.item(),
             'local_desc_l2': desc_l.item(),
             'detector_crossentropy': detect.item()
-        }, logvar
+        }, w
     
 
 if __name__ == '__main__':
@@ -191,7 +176,7 @@ if __name__ == '__main__':
     },
     'local_head': {
         'descriptor_dim': 128,
-        'detector_grid': 1,
+        'detector_grid': 8,
         'input_channels': 96
     },
     'global_head': {
@@ -208,3 +193,5 @@ if __name__ == '__main__':
             print(k, v.shape)
         elif k == 'local_descriptor_map':
             print(k, v.shape)
+
+    

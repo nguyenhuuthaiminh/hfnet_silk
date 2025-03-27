@@ -116,7 +116,7 @@ class LocalHead(nn.Module):
         # Detector Head
         self.det_conv1 = nn.Conv2d(config['input_channels'], 128, kernel_size=3, stride=1, padding=1)
         self.det_bn1 = nn.BatchNorm2d(128)
-        self.det_conv2 = nn.Conv2d(128, 1 + detector_grid ** 2, kernel_size=1, stride=1, padding=0)
+        self.det_conv2 = nn.Conv2d(128, detector_grid ** 2, kernel_size=1, stride=1, padding=0)
 
         self.detector_grid = detector_grid
 
@@ -129,10 +129,13 @@ class LocalHead(nn.Module):
         # Detector Head
         logits = F.relu6(self.det_bn1(self.det_conv1(features)))
         logits = self.det_conv2(logits)
+        logits = F.pixel_shuffle(logits, self.detector_grid)
+        prob = F.sigmoid(logits)
 
-        prob_full = F.softmax(logits, dim=1)  # Compute softmax over the last dimension
-        prob = prob_full[:, :-1, :, :]  # Exclude the "no interest point" dustbin
-        prob = F.pixel_shuffle(prob, self.detector_grid)  # Convert to dense scores
-        prob = torch.squeeze(prob, dim=1)  # Remove unnecessary channel dimension
 
-        return desc, logits, prob_full, prob
+        # prob_full = F.softmax(logits, dim=1)  # Compute softmax over the last dimension
+        # prob = prob_full[:, :-1, :, :]  # Exclude the "no interest point" dustbin
+        # prob = F.pixel_shuffle(prob, self.detector_grid)  # Convert to dense scores
+        # prob = torch.squeeze(prob, dim=1)  # Remove unnecessary channel dimension
+
+        return desc, logits, prob

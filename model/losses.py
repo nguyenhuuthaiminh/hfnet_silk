@@ -47,7 +47,7 @@ def descriptor_local_loss(inp, out):
     d = torch.sum(d, dim=1) / 2
     return d
 
-def detector_loss(inp, out, config, threshold=0.5):
+def detector_loss(inp, out,config):
     """
     Computes cross-entropy loss for keypoints or dense scores.
     
@@ -65,23 +65,10 @@ def detector_loss(inp, out, config, threshold=0.5):
         torch.Tensor: Scalar cross-entropy loss.
     """
     logits = out['logits']  # [B, C, H, W]
-    B, _, H, W = logits.shape
-    grid_size = config['local_head']['detector_grid']
 
     if 'keypoint_map' in inp: # Hard Labels
         labels = inp['keypoint_map']  # e.g. [B, 1, H, W]
-        # Pixel unshuffle
-        labels = F.pixel_unshuffle(labels, grid_size)  # [B, grid_size^2, H', W']
-        
-        # Concatenate channel of ones for background vs. foreground classes
-        # Note: This effectively creates 2 channels: 2*labels vs. 1
-        # Then argmax picks whichever channel is higher.
-        ones_channel = torch.ones(B, 1, H, W, device=logits.device)
-        labels = torch.cat((2 * labels, ones_channel), dim=1)
-        labels = torch.argmax(labels, dim=1)  # [B, H, W]
-        
-        # Cross entropy expects class indices in [0, C-1]
-        loss = F.cross_entropy(logits, labels.long())
+        loss = F.binary_cross_entropy_with_logits(logits, labels)
 
     elif 'dense_scores' in inp: # Soft labes
         # If dense_scores is used as a multi-class probability map or similar

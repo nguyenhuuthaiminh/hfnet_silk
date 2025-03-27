@@ -1,0 +1,28 @@
+
+[2025-03-26 14:37:26]
+silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.698  
+repeatability             :0.129  
+mAP                       :0.029  
+
+[2025-03-26 15:25:25]
+silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.706  
+repeatability             :0.133  
+mAP                       :0.029  
+
+[2025-03-26 16:55:22]
+silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.630  
+repeatability             :0.132  
+mAP                       :0.031  
+
+[2025-03-26 19:05:40]
+silk: pos_weight{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.757  
+repeatability             :0.123  
+mAP                       :0.027  

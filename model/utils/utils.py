@@ -1,38 +1,43 @@
 import torch
 import torch.nn.functional as F
 
-def desc4silk(ret):
+def desc4silk(ret,out):
     """
     Upsample `local_descriptor_map` from [B, 128, 60, 80] to [B, 128, 480, 640]
     using `F.grid_sample()`.
+    out: silk output including descriptor_position 
     """
     # Extract relevant tensors from the input dictionary
     dense_scores = ret['dense_scores']  # shape: [B, H, W]
-    local_descriptor_map = ret['local_descriptor_map']  # shape: [B, 128, H', W']
+    keypoints = out['keypoints']  # shape: [N, 2]
+    desc_map = ret['local_descriptor_map'].unsqueeze(0)  # [1, C, H', W']
+    _, C, H_desc, W_desc = desc_map.shape
 
-    B, H, W = dense_scores.shape
-    _, C, H_ld, W_ld = local_descriptor_map.shape  # For example, 128, 60, 80
+    # Extract original image shape to scale keypoints
+    _, _, H_img, W_img = ret['image_shape']
+    scale = torch.tensor([H_desc - 1, W_desc - 1], 
+                         device=keypoints.device, 
+                         dtype=torch.float32)
+    scale /= torch.tensor([H_img - 1, W_img - 1], 
+                        device=keypoints.device,
+                        dtype=torch.float32)
 
-    # 1) Build a normalized sampling grid in the range [-1, 1].
-    #    H, W here are the desired output dimensions (480, 640).
-    y = torch.linspace(-1, 1, H, device=local_descriptor_map.device)
-    x = torch.linspace(-1, 1, W, device=local_descriptor_map.device)
-    grid_y, grid_x = torch.meshgrid(y, x, indexing='ij')  # shape: [H, W] each
+    # Scale keypoints to descriptor map size
+    keypoints_scaled = keypoints.float() * scale.unsqueeze(0).unsqueeze(0)
 
-    # 2) Combine x, y into a single grid of shape [H, W, 2], then expand to [B, H, W, 2].
-    grid = torch.stack((grid_x, grid_y), dim=-1).expand(B, -1, -1, -1)
+    # Normalize keypoints for grid_sample to [-1, 1]
+    norm_kpts = keypoints_scaled.clone()
+    norm_kpts[..., 0] = (norm_kpts[..., 0] / (W_desc - 1)) * 2 - 1
+    norm_kpts[..., 1] = (norm_kpts[..., 1] / (H_desc - 1)) * 2 - 1
 
-    # 3) Upsample the descriptor map using bilinear interpolation.
-    #    `align_corners=True` ensures corners in [-1,1] align with corner pixels.
-    upsampled_map = F.grid_sample(
-        local_descriptor_map,
-        grid,
-        mode='bilinear',
-        align_corners=True
-    )
+    # Sample descriptors
+    grid = norm_kpts.unsqueeze(2)  # [1, N, 1, 2]
+    local_desc = F.grid_sample(desc_map, grid, align_corners=True)  # [1, C, N, 1]
+    local_desc = local_desc.squeeze(-1).permute(0, 2, 1)           # [1, N, C]
+    local_desc = F.normalize(local_desc, p=2, dim=-1)
 
-    # Update the dictionary with the upsampled map
-    ret['local_descriptor_map'] = upsampled_map
+    ret['local_descriptor_map'] = local_desc
+
     return ret
 
 if __name__ == '__main__':
@@ -44,6 +49,9 @@ if __name__ == '__main__':
         'local_descriptor_map': torch.rand(1, 128, 60, 80),  # shape: [B, 128, H', W']
         'image_shape': torch.rand(1, 1, 480, 640)
     }
+    out = {
+        'keypoints': torch.rand(100,2)
+    }
 
-    rets = desc4silk(ret)
+    rets = desc4silk(ret,out)
     print(rets['local_descriptor_map'].shape)  # Expected: [1, 128, 480, 640]

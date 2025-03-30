@@ -49,7 +49,7 @@ class CustomImageDataset(Dataset):
         keypoint_map = torch.zeros(1,H_desc, W_desc)
         local_descriptor_map[:, keypoints[:, 0], keypoints[:, 1]] = local_descriptors.T
         
-        keypoint_map[:, keypoints[:, 0], keypoints[:, 1]] = scores
+        keypoint_map[:, keypoints[:, 0], keypoints[:, 1]] = 1
 
         inp = {
             "global_descriptor": glo['global_descriptor'],  

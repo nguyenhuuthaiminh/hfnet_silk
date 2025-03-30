@@ -1,28 +1,28 @@
 
-[2025-03-26 13:24:41]
+[2025-03-26 13:24:41] 10000 keypoints unmormalize
 silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
 average_num_keypoints     :300.000  
 matching_score            :0.036  
 pose_correctness          :0.034  
 mAP                       :0.014  
 
-[2025-03-26 15:19:31]
+[2025-03-26 15:19:31] 5000 keypoints
 silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
 average_num_keypoints     :300.000  
 matching_score            :0.082  
 pose_correctness          :0.062  
 mAP                       :0.064  
 
-[2025-03-26 16:29:45]
+[2025-03-26 16:29:45] 3000 keypoints
 silk: sigmoid{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
 average_num_keypoints     :300.000  
 matching_score            :0.095  
 pose_correctness          :0.057  
 mAP                       :0.085  
 
-[2025-03-26 19:12:02]
-silk: pos_weight{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+[2025-03-27 12:12:38]
+silk: 3k{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
 average_num_keypoints     :300.000  
-matching_score            :0.079  
-pose_correctness          :0.052  
-mAP                       :0.065  
+matching_score            :0.085  
+pose_correctness          :0.062  
+mAP                       :0.070  

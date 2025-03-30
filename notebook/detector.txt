@@ -20,9 +20,23 @@ localization_error        :0.630
 repeatability             :0.132  
 mAP                       :0.031  
 
-[2025-03-26 19:05:40]
-silk: pos_weight{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+[2025-03-27 12:27:13] loss with logits
+silk: 3k{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
 average_num_keypoints     :300.000  
-localization_error        :0.757  
-repeatability             :0.123  
-mAP                       :0.027  
+localization_error        :0.655  
+repeatability             :0.125  
+mAP                       :0.026  
+
+[2025-03-29 16:59:48]
+silk: milestone{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.830  
+repeatability             :0.070  
+mAP                       :0.008  
+
+[2025-03-29 17:04:32]
+silk: soft lables 10k{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :0.635  
+repeatability             :0.114  
+mAP                       :0.018  

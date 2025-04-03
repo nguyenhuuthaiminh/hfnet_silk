@@ -103,7 +103,7 @@ def export_loader(ret, config, image):
     keypoints = pred['keypoints'][0].squeeze(0).cpu().numpy()  # Convert back to NumPy
     scores = pred['scores'][0].detach().cpu().numpy()
     descriptors = pred['local_descriptors'][0].squeeze(0).detach().cpu().numpy()
-    image_shape = image.shape[1:]  # Get H, W
+    image_shape = image.shape[-2:][::-1]  # Get H, W
 
     # Apply border filtering if enabled
     remove_borders = config.get('remove_borders', 0)

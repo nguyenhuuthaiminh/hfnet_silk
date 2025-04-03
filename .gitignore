@@ -1,3 +1,5 @@
 __pycache__/
 weight/
-notebook/config.py/
+notebook/config.py
+model/training/config.py
+results/

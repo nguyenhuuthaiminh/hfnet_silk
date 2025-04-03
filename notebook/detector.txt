@@ -40,3 +40,38 @@ average_num_keypoints     :300.000
 localization_error        :0.635  
 repeatability             :0.114  
 mAP                       :0.018  
+
+[2025-04-01 17:22:04]
+silk: soft_lables 2{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :1.620  
+repeatability             :0.248  
+mAP                       :0.085   
+
+[2025-04-01 17:47:21]
+silk: soft_lables 2{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 1000}
+average_num_keypoints     :993.987  
+localization_error        :1.681  
+repeatability             :0.313  
+mAP                       :0.126  
+
+[2025-04-02 10:30:24] align_corners= True
+silk: soft_lables 2{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :1.620  
+repeatability             :0.248  
+mAP                       :0.085  
+
+[2025-04-02 14:15:56]
+silk: align_corners{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+localization_error        :1.652  
+repeatability             :0.240  
+mAP                       :0.076  
+
+[2025-04-03 09:51:31]
+silk: align_corners{'local': {'nms_radius': 4, 'detector_threshold': 0.15, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :299.021  
+localization_error        :1.652  
+repeatability             :0.240  
+mAP                       :0.076  

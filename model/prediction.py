@@ -88,7 +88,7 @@ def predict(ret, config):
 
     # Sample descriptors
     grid = norm_kpts.unsqueeze(2)  # [1, N, 1, 2]
-    local_desc = F.grid_sample(desc_map, grid, align_corners=True)  # [1, C, N, 1]
+    local_desc = F.grid_sample(desc_map, grid, align_corners=False)  # [1, C, N, 1]
     local_desc = local_desc.squeeze(-1).permute(0, 2, 1)           # [1, N, C]
     local_desc = F.normalize(local_desc, p=2, dim=-1)
 
@@ -121,3 +121,7 @@ if __name__ == '__main__':
     ret = predict(ret, config)
     for k, v in ret.items():
         print(k, v.shape)
+        if k == 'keypoints':
+            print('keypoints')
+            # show the maximum keypoint positions
+            print(max(v[0, :, 0]), max(v[0, :, 1]))

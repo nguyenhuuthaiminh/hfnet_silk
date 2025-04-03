@@ -23,3 +23,14 @@ def div0(a, b):
             idx = ~np.isfinite(c)
             c[idx] = np.where(a[idx] == 0, 1, 0)  # -inf inf NaN
     return c
+
+
+
+if __name__ == '__main__':
+    # Example usage
+    points = np.array([[1, 2], [3, 4], [5, 6]])
+    homogenous_points = to_homogeneous(points)
+    print("Homogenous points:", homogenous_points)
+    
+    original_points = from_homogeneous(homogenous_points)
+    print("Original points:", original_points)

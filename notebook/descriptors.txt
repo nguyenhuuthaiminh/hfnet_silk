@@ -26,3 +26,80 @@ average_num_keypoints     :300.000
 matching_score            :0.085  
 pose_correctness          :0.062  
 mAP                       :0.070  
+
+[2025-03-31 09:52:35]
+silk: soft lables 10k{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.077  
+pose_correctness          :0.047  
+mAP                       :0.061  
+
+[2025-03-31 10:49:26]
+silk: soft lables 10k{'local': {'nms_radius': 4, 'detector_threshold': 0.005, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.053  
+pose_correctness          :0.071  
+mAP                       :0.098  
+
+[2025-03-31 11:46:34]
+silk: soft lables 10k{'local': {'nms_radius': 8, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.054  
+pose_correctness          :0.081  
+mAP                       :0.111  
+
+[2025-03-31 12:29:56]
+silk: soft lables 10k{'local': {'nms_radius': 16, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :268.084  
+matching_score            :0.046  
+pose_correctness          :0.069  
+mAP                       :0.114  
+
+[2025-03-31 13:48:57]
+silk: soft lables 10k{'local': {'nms_radius': 8, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300, 'do_nms': True, 'nms_thresh': 4, 'remove_borders': 4}
+average_num_keypoints     :300.000  
+matching_score            :0.054  
+pose_correctness          :0.079  
+mAP                       :0.111  
+
+[2025-03-31 14:56:35]
+silk: soft lables 10k{'local': {'nms_radius': 4, 'detector_threshold': 0.15, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :241.297  
+matching_score            :0.055  
+pose_correctness          :0.076  
+mAP                       :0.106  
+
+[2025-03-31 17:02:06]
+silk: soft lables 10k{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.053  
+pose_correctness          :0.071  
+mAP                       :0.098  
+
+[2025-04-01 11:00:43]
+silk: soft_lables{'local': {'nms_radius': 0, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.079  
+pose_correctness          :0.074  
+mAP                       :0.064  
+
+[2025-04-01 11:11:07] 
+silk: soft_lables{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.057  
+pose_correctness          :0.098  
+mAP                       :0.108  
+
+[2025-04-01 16:49:29] deconv 
+silk: soft_labels 2{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.058  
+pose_correctness          :0.124  
+mAP                       :0.111  
+
+[2025-04-02 14:33:54]
+silk: align_corners{'local': {'nms_radius': 4, 'detector_threshold': 0.015, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.054  
+pose_correctness          :0.076  
+mAP                       :0.096  

@@ -8,6 +8,11 @@ from .utils.misc import to_homogeneous, angle_error
 
 from model.export_local import export_loader
 import tqdm as tq
+import matplotlib.pyplot as plt
+
+from .utils.utils import plot_matches
+
+import torch
 
 def compute_homography_error(kpts1, kpts2, matches, shape2, H_gt):
     if matches.shape[0] == 0:
@@ -92,6 +97,21 @@ def compute_pose_recall(errors, num_queries):
     recall = np.concatenate([[0], recall])
     return errors, recall
 
+def compute_matching_score_single(kpts_w, kpts, matches, vis_w, dist_thresh=3):
+    if isinstance(kpts_w, torch.Tensor):
+        kpts_w = kpts_w.detach().cpu().numpy()
+    if isinstance(kpts, torch.Tensor):
+        kpts = kpts.detach().cpu().numpy()
+    if isinstance(matches, torch.Tensor):
+        matches = matches.detach().cpu().numpy()
+    if isinstance(vis_w, torch.Tensor):
+        vis_w = vis_w.detach().cpu().numpy()
+    vis_matched = vis_w[matches[:, 0]]
+    match_dist = np.linalg.norm(kpts_w[matches[:, 0]] - kpts[matches[:, 1]], axis=-1)
+    correct_matches = ((match_dist < dist_thresh)*vis_matched).sum()
+    match_score = correct_matches / np.maximum(np.sum(vis_w), 1.0)
+    assert vis_matched.sum() == vis_w.sum()
+    return match_score, vis_matched.sum(), correct_matches, (match_dist < dist_thresh)
 
 def evaluate(model, dataloader, config):
     iterations = 0
@@ -117,7 +137,6 @@ def evaluate(model, dataloader, config):
                               data['image'].squeeze(0))
         pred2 = export_loader(model(data['image2'].unsqueeze(0)), config, 
                               data['image2'].squeeze(0))
-        
 
         num_kpts.extend([len(pred1['keypoints']), len(pred2['keypoints'])])
         if len(pred1['keypoints']) == 0 or len(pred2['keypoints']) == 0:
@@ -130,14 +149,11 @@ def evaluate(model, dataloader, config):
             pred2['local_descriptors'], pred1['local_descriptors'],
             do_ratio_test=True, cross_check=False)
 
-
         H = data['homography'][0]
         kpts1_w, vis1 = keypoints_warp_2D(
             pred1['keypoints'], np.linalg.inv(H), shape2)
         kpts2_w, vis2 = keypoints_warp_2D(
             pred2['keypoints'], H, shape1)
-
-        # print(data['name'][0],pred1['keypoints'].shape)
 
         error_H = compute_homography_error(
             pred1['keypoints'], pred2['keypoints'], matches1, shape2,H)
@@ -160,7 +176,9 @@ def evaluate(model, dataloader, config):
         all_tp.append(tp)
         all_num_gt += num_gt
         all_distances.append(distances)
-        
+        all_matches, _ = matching(
+                pred1['local_descriptors'], pred2['local_descriptors'],
+                do_ratio_test=True, cross_check=False)
 
     precision, recall, distances = compute_pr(
         np.concatenate(all_tp, 0), np.concatenate(all_distances, 0),

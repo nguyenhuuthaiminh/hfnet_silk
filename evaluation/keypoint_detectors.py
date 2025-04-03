@@ -7,6 +7,7 @@ from .utils.metrics import compute_pr, compute_average_precision
 from model.export_local import export_loader
 import tqdm
 
+import matplotlib.pyplot as plt
 
 def compute_correctness(kpts1, kpts2, kpts1_w, kpts2_w, thresh, mutual=True):
 
@@ -35,23 +36,23 @@ def evaluate(model, dataloader, config):
 
     for data in tqdm.tqdm(dataloader):
         
-        shape1 = data['image'].detach().cpu().numpy().shape[-2:][::-1]  # (height, width) -> (width, height)
-        shape2 = data['image2'].detach().cpu().numpy().shape[-2:][::-1]  # modifiy
+        shape1 = data['image'].detach().cpu().numpy().shape[-2:][::-1]  
+        shape2 = data['image2'].detach().cpu().numpy().shape[-2:][::-1]  
 
-        #print(shape1,shape2)
+        # print(shape1,shape2)
 
         pred1 = export_loader(model(data['image'].unsqueeze(0)), config, 
                               data['image'].squeeze(0))
+
         pred2 = export_loader(model(data['image2'].unsqueeze(0)), config, 
                               data['image2'].squeeze(0))
-
 
         num_kpts.extend([len(pred1['keypoints']), len(pred2['keypoints'])])
         if len(pred1['keypoints']) == 0 or len(pred2['keypoints']) == 0:
             repeatability.append(0)
             continue
         H = data['homography'][0]
-        #print(H)
+        # print(H.shape)
         kpts1_w, vis1 = keypoints_warp_2D(
             pred1['keypoints'], np.linalg.inv(H), shape2)
         kpts2_w, vis2 = keypoints_warp_2D(
@@ -76,6 +77,7 @@ def evaluate(model, dataloader, config):
         all_tp.extend([correct1[vis1], correct2[vis2]])
         all_scores.extend([pred1['scores'][vis1], pred2['scores'][vis2]])
         all_num_gt += vis2.sum() + vis1.sum()
+        # break
 
     precision, recall, scores = compute_pr(
         np.concatenate(all_tp, 0), np.concatenate(all_scores, 0), all_num_gt,

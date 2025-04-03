@@ -4,16 +4,27 @@ from .misc import from_homogeneous, to_homogeneous
 
 
 def nms_fast(kpts, scores, shape, dist_thresh=4):
-    grid = np.zeros(shape, dtype=int)
-    inds = np.zeros(shape, dtype=int)
-
-    inds1 = np.argsort(-scores)  # Sort by confidence
+    H, W = shape  # Đảm bảo shape có đúng 2 giá trị
+    grid = np.zeros((H, W), dtype=np.int32)  # Tạo grid có cùng kích thước ảnh
+    inds = np.zeros((H, W), dtype=np.int32) - 1  # Chỉ mục của keypoints
+    
+    # Sắp xếp keypoints theo scores giảm dần
+    inds1 = np.argsort(-scores)  
     kpts_sorted = kpts[inds1]
-    kpts_sorted = kpts_sorted.round().astype(int)  # Rounded corners.
 
+    # Đảm bảo kpts_sorted có đúng kích thước (N, 2)
+    kpts_sorted = np.round(kpts_sorted).astype(int)
 
-    grid[kpts_sorted[:, 1], kpts_sorted[:, 0]] = 1
-    inds[kpts_sorted[:, 1], kpts_sorted[:, 0]] = np.arange(len(kpts_sorted))
+    # Lọc keypoints ra ngoài ảnh
+    valid_idx = (kpts_sorted[:, 1] >= 0) & (kpts_sorted[:, 1] < H) & \
+                (kpts_sorted[:, 0] >= 0) & (kpts_sorted[:, 0] < W)
+    kpts_sorted = kpts_sorted[valid_idx]
+
+    # **Sửa lỗi:** Đảm bảo grid không bị lỗi index
+    if len(kpts_sorted) > 0:
+        grid[kpts_sorted[:, 1], kpts_sorted[:, 0]] = 1
+        inds[kpts_sorted[:, 1], kpts_sorted[:, 0]] = np.arange(len(kpts_sorted))
+
     pad = dist_thresh
     grid = np.pad(grid, [[pad]*2]*2, mode='constant')
 

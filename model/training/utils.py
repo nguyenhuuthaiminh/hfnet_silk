@@ -8,9 +8,8 @@ def desc4silk(ret,out):
     out: silk output including descriptor_position 
     """
     # Extract relevant tensors from the input dictionary
-    dense_scores = ret['dense_scores']  # shape: [B, H, W]
     keypoints = out['keypoints']  # shape: [N, 2]
-    desc_map = ret['local_descriptor_map'].unsqueeze(0)  # [1, C, H', W']
+    desc_map = ret['local_descriptor_map']  # [1, C, H', W']
     _, C, H_desc, W_desc = desc_map.shape
 
     # Extract original image shape to scale keypoints
@@ -24,12 +23,12 @@ def desc4silk(ret,out):
 
     # Scale keypoints to descriptor map size
     keypoints_scaled = keypoints.float() * scale.unsqueeze(0).unsqueeze(0)
-
+    
     # Normalize keypoints for grid_sample to [-1, 1]
     norm_kpts = keypoints_scaled.clone()
-    norm_kpts[..., 0] = (norm_kpts[..., 0] / (W_desc - 1)) * 2 - 1
-    norm_kpts[..., 1] = (norm_kpts[..., 1] / (H_desc - 1)) * 2 - 1
-
+    norm_kpts[..., 0] = (norm_kpts[..., 0] / (H_desc - 1)) * 2 - 1
+    norm_kpts[..., 1] = (norm_kpts[..., 1] / (W_desc - 1)) * 2 - 1
+   
     # Sample descriptors
     grid = norm_kpts.unsqueeze(2)  # [1, N, 1, 2]
     local_desc = F.grid_sample(desc_map, grid, align_corners=True)  # [1, C, N, 1]
@@ -47,11 +46,13 @@ if __name__ == '__main__':
     ret = {
         'dense_scores': torch.rand(1, 480, 640),        # shape: [B, H, W]
         'local_descriptor_map': torch.rand(1, 128, 60, 80),  # shape: [B, 128, H', W']
-        'image_shape': torch.rand(1, 1, 480, 640)
+        'image_shape': torch.rand(1, 1, 480, 640).shape
     }
     out = {
-        'keypoints': torch.rand(100,2)
+        'keypoints': torch.randint(0,640,(100,2))  # shape: [100, 2]
     }
+    print(out['keypoints'].shape)
+    print(out['keypoints'][...,0])
 
     rets = desc4silk(ret,out)
     print(rets['local_descriptor_map'].shape)  # Expected: [1, 128, 480, 640]

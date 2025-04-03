@@ -44,7 +44,7 @@ def descriptor_local_loss(inp, out):
     """
     d = torch.square(inp['local_descriptor_map'] - out['local_descriptor_map'])
     # Sum over channels and divide by 2
-    d = torch.sum(d, dim=1) / 2
+    d = torch.sum(d, dim=-1) / 2
     return d
 
 def detector_loss(inp, out,config):
@@ -73,7 +73,6 @@ def detector_loss(inp, out,config):
     elif 'dense_scores' in inp: # Soft labes
         # If dense_scores is used as a multi-class probability map or similar
         labels = inp['dense_scores']  # [B, C, H, W]
-        
         loss = F.cross_entropy(logits, labels)
 
     else:

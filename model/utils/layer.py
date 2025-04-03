@@ -101,7 +101,7 @@ class DimensionalityReduction(nn.Module):
             return descriptor, reg_loss
 
         return descriptor
-    
+
 class LocalHead(nn.Module):
     def __init__(self, config):
         super(LocalHead, self).__init__()
@@ -130,12 +130,7 @@ class LocalHead(nn.Module):
         logits = F.relu6(self.det_bn1(self.det_conv1(features)))
         logits = self.det_conv2(logits)
         logits = F.pixel_shuffle(logits, self.detector_grid)
+        
         prob = F.sigmoid(logits)
-
-
-        # prob_full = F.softmax(logits, dim=1)  # Compute softmax over the last dimension
-        # prob = prob_full[:, :-1, :, :]  # Exclude the "no interest point" dustbin
-        # prob = F.pixel_shuffle(prob, self.detector_grid)  # Convert to dense scores
-        # prob = torch.squeeze(prob, dim=1)  # Remove unnecessary channel dimension
 
         return desc, logits, prob

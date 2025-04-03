@@ -1,11 +1,9 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import math
 
-
-from model.utils.layer import VLAD, DimensionalityReduction, LocalHead
-from model.losses import descriptor_global_loss, descriptor_local_loss, detector_loss
+from utils.layer import VLAD, DimensionalityReduction, LocalHead
+from losses import descriptor_global_loss, descriptor_local_loss, detector_loss
 
 def image_normalization(image, pixel_value_offset=128.0, pixel_value_scale=128.0):
     return (image - pixel_value_offset) / pixel_value_scale
@@ -99,7 +97,6 @@ class HFNet(nn.Module):
             VLAD(config['global_head']),
             DimensionalityReduction(config['global_head'])
         )
-        self.logvars = nn.Parameter(torch.tensor([1.0, 1.0, 1.0], requires_grad=True))
         self._initialize_weights()
 
     def forward(self, x):
@@ -142,20 +139,12 @@ class HFNet(nn.Module):
         detect = detector_loss(inputs, outputs, config).mean()
 
         # Apply weighting
-        if config['loss_weights'] == 'uncertainties':
-            w = {f'logvar_{i}': logvar.item() for i, logvar in enumerate(self.logvars)}
-            precisions = [torch.exp(-logvar) for logvar in self.logvars]
-            total_loss = desc_g * precisions[0] + (self.logvars[0])
-            total_loss += desc_l * precisions[1] + (self.logvars[1])
-            total_loss += 2 * detect * precisions[2] + (self.logvars[2])
-        else:
-            w = config['loss_weights']
-            total_loss = (
-                (w['global'] * desc_g + w['local'] * desc_l + w['detector'] * detect) /
-                sum(w.values())
-            )
+        w = config['loss_weights']
+        total_loss = (
+            (w['global'] * desc_g + w['local'] * desc_l + w['detector'] * detect) /
+            sum(w.values())
+        )
         
-
         return total_loss, {
             'global_desc_l2': desc_g.item(),
             'local_desc_l2': desc_l.item(),
@@ -170,7 +159,7 @@ if __name__ == '__main__':
     'image_channels':1,
     'loss_weights': 'uncertainties',
     'local':{
-        'detector_threshold': 0.001,
+        'detector_threshold': 0.015,
         'nms_radius': 4,
         'num_keypoints': 10000
     },
@@ -193,5 +182,3 @@ if __name__ == '__main__':
             print(k, v.shape)
         elif k == 'local_descriptor_map':
             print(k, v.shape)
-
-    

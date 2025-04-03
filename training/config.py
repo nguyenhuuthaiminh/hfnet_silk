@@ -1,3 +1,0 @@
-IMAGE_DIR = ''
-GLOBAL_DIR =''
-LOCAL_DIR =''

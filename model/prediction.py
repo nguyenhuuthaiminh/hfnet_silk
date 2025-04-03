@@ -83,8 +83,8 @@ def predict(ret, config):
 
     # Normalize keypoints for grid_sample to [-1, 1]
     norm_kpts = keypoints_scaled.clone()
-    norm_kpts[..., 0] = (norm_kpts[..., 0] / (W_desc - 1)) * 2 - 1
-    norm_kpts[..., 1] = (norm_kpts[..., 1] / (H_desc - 1)) * 2 - 1
+    norm_kpts[..., 0] = (norm_kpts[..., 0] / (H_desc - 1)) * 2 - 1
+    norm_kpts[..., 1] = (norm_kpts[..., 1] / (W_desc - 1)) * 2 - 1
 
     # Sample descriptors
     grid = norm_kpts.unsqueeze(2)  # [1, N, 1, 2]

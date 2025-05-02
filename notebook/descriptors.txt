@@ -1,0 +1,83 @@
+[2025-04-21 16:22:28]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.005, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-21 17:00:30]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.001, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-21 17:11:13]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.01, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-21 17:22:39]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.1, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-21 17:32:53]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.3, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :299.711  
+matching_score            :0.204  
+pose_correctness          :0.347  
+mAP                       :0.416  
+
+[2025-04-21 17:41:54]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.2, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-21 17:51:35]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.2, 'num_keypoints': 3000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.205  
+pose_correctness          :0.347  
+mAP                       :0.415  
+
+[2025-04-22 09:30:47]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.1, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 500}
+average_num_keypoints     :499.923  
+matching_score            :0.205  
+pose_correctness          :0.364  
+mAP                       :0.364  
+
+[2025-04-22 16:24:35]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.2, 'num_keypoints': 10000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :300.000  
+matching_score            :0.208  
+pose_correctness          :0.343  
+mAP                       :0.425  
+
+[2025-04-22 16:35:57]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.3, 'num_keypoints': 10000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :299.711  
+matching_score            :0.208  
+pose_correctness          :0.343  
+mAP                       :0.425  
+
+[2025-04-22 17:29:43]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.5, 'num_keypoints': 10000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :286.998  
+matching_score            :0.208  
+pose_correctness          :0.343  
+mAP                       :0.433  
+
+[2025-04-22 17:41:10]
+silk: hfnet-silk lr =3e-1{'local': {'nms_radius': 4, 'detector_threshold': 0.65, 'num_keypoints': 1000}, 'do_ratio_test': True, 'correct_match_thresh': 3, 'correct_H_thresh': 3, 'num_features': 300}
+average_num_keypoints     :201.479  
+matching_score            :0.202  
+pose_correctness          :0.331  
+mAP                       :0.473  

@@ -1,0 +1,6 @@
+__pycache__/
+weight/
+config
+results/
+local_result/
+notebook/config.py
